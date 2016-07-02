@@ -1,0 +1,18 @@
+global
+    daemon
+    maxconn 4
+    log 127.0.0.1 local0 notice
+
+defaults
+   log global
+    mode http
+    option  httplog
+
+listen consul 0.0.0.0:8000
+    mode http
+    stats enable
+    stats uri /haproxy?stats
+    option forwardfor
+    {{range service "web"}}
+    server {{.Node}} {{.Address}}:{{.Port}}{{end}}
+
