@@ -3,6 +3,7 @@
 In order to use this repo you need to have Vagrant and librarian-puppet installed.
 
 * gem install librarian-puppet
+* librarian-puppet install 
 * Download [Vagrant](https://www.vagrantup.com/downloads.html)
 
 # Running 
