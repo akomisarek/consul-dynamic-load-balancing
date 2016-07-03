@@ -1,7 +1,7 @@
 class { '::consul':
   manage_group => false,
   version => '0.6.4',
- config_hash => {
+  config_hash => {
     'data_dir'         => '/opt/consul',
     'datacenter'       => 'vagrant',
     'log_level'        => 'INFO',
@@ -11,29 +11,25 @@ class { '::consul':
     'retry_join'       => ['172.16.0.2'],
   }
 }
+
 Archive {
   require => Package['unzip'],
 }
-package { 'unzip': 
+
+package { 'unzip':
   ensure => latest,
 }
 
-package { 'iptables-services': 
-  ensure => latest,
-  before => Resources['firewall'],
-}
 package { 'bind-utils':
   ensure => latest,
-  }
-  resources { 'firewall':
-     purge => true,
-   }
+}
 
 class { 'apache': }->
-file { '/var/www/html/index.html': 
-ensure => file,
-content => 'Agent2'
+file { '/var/www/html/index.html':
+  ensure => file,
+  content => "Agent2\n"
 }
+
 ::consul::service { 'web':
   checks  => [
     {
@@ -44,3 +40,11 @@ content => 'Agent2'
   port    => 80,
   tags    => ['web']
 }
+
+exec { "Setup the firewall on port 80":
+  command => "/bin/firewall-cmd --permanent --zone=public --add-service={http,https} && /bin/firewall-cmd --zone=public --add-service={http,https}",
+  user    => "root",
+  unless  => "/bin/grep 'name=\"http\"' /etc/firewalld/zones/public.xml"
+}
+
+
