@@ -77,79 +77,38 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # You will need to create the manifests directory and a manifest in
   # the file default.pp in the manifests_path directory.
 
-  #config.vm.provision "puppet" do |puppet|
-  #end
-
   config.vm.define "server" do |server|
-      server.vm.provision "puppet" do |puppet|
-          puppet.manifest_file = "server.pp"
-     puppet.environment = "production"
-     puppet.environment_path = "environments"
-     puppet.module_path = "modules"
-     puppet.manifests_path = "manifests"
-     puppet.options = "--verbose --debug"
-      end
-      server.vm.network :private_network, ip: "172.16.0.2", :netmask => "255.255.0.0", :dns => "127.0.0.1"
+    server.vm.provision "puppet" do |puppet|
+      puppet.manifest_file = "server.pp"
+      puppet.environment = "production"
+      puppet.environment_path = "environments"
+      puppet.module_path = "modules"
+      puppet.manifests_path = "manifests"
+    end
+    server.vm.network :private_network, ip: "172.16.0.2", :netmask => "255.255.0.0", :dns => "127.0.0.1"
   end
 
   config.vm.define "agent" do |agent|
-      agent.vm.provision "puppet" do |puppet|
-          puppet.manifest_file = "client.pp"
-     puppet.environment = "production"
-     puppet.environment_path = "environments"
-     puppet.module_path = "modules"
-     puppet.manifests_path = "manifests"
-     puppet.options = "--verbose --debug"
-      end
-      agent.vm.network :private_network, ip: "172.16.0.3", :netmask => "255.255.0.0"
+    agent.vm.provision "puppet" do |puppet|
+      puppet.manifest_file = "client.pp"
+      puppet.environment = "production"
+      puppet.environment_path = "environments"
+      puppet.module_path = "modules"
+      puppet.manifests_path = "manifests"
+      # puppet.options = "--verbose --debug"
+    end
+    agent.vm.network :private_network, ip: "172.16.0.3", :netmask => "255.255.0.0"
   end
+
   config.vm.define "agent2" do |agent2|
-      agent2.vm.provision "puppet" do |puppet|
-          puppet.manifest_file = "agent2.pp"
-     puppet.environment = "production"
-     puppet.environment_path = "environments"
-     puppet.module_path = "modules"
-     puppet.manifests_path = "manifests"
-     puppet.options = "--verbose --debug"
-      end
-      agent2.vm.network :private_network, ip: "172.16.0.4", :netmask => "255.255.0.0"
+    agent2.vm.provision "puppet" do |puppet|
+      puppet.manifest_file = "agent2.pp"
+      puppet.environment = "production"
+      puppet.environment_path = "environments"
+      puppet.module_path = "modules"
+      puppet.manifests_path = "manifests"
+      # puppet.options = "--verbose --debug"
+    end
+    agent2.vm.network :private_network, ip: "172.16.0.4", :netmask => "255.255.0.0"
   end
-
-  # Enable provisioning with chef solo, specifying a cookbooks path, roles
-  # path, and data_bags path (all relative to this Vagrantfile), and adding
-  # some recipes and/or roles.
-  #
-  # config.vm.provision "chef_solo" do |chef|
-  #   chef.cookbooks_path = "../my-recipes/cookbooks"
-  #   chef.roles_path = "../my-recipes/roles"
-  #   chef.data_bags_path = "../my-recipes/data_bags"
-  #   chef.add_recipe "mysql"
-  #   chef.add_role "web"
-  #
-  #   # You may also specify custom JSON attributes:
-  #   chef.json = { mysql_password: "foo" }
-  # end
-
-  # Enable provisioning with chef server, specifying the chef server URL,
-  # and the path to the validation key (relative to this Vagrantfile).
-  #
-  # The Opscode Platform uses HTTPS. Substitute your organization for
-  # ORGNAME in the URL and validation key.
-  #
-  # If you have your own Chef Server, use the appropriate URL, which may be
-  # HTTP instead of HTTPS depending on your configuration. Also change the
-  # validation key to validation.pem.
-  #
-  # config.vm.provision "chef_client" do |chef|
-  #   chef.chef_server_url = "https://api.opscode.com/organizations/ORGNAME"
-  #   chef.validation_key_path = "ORGNAME-validator.pem"
-  # end
-  #
-  # If you're using the Opscode platform, your validator client is
-  # ORGNAME-validator, replacing ORGNAME with your organization name.
-  #
-  # If you have your own Chef Server, the default validation client name is
-  # chef-validator, unless you changed the configuration.
-  #
-  #   chef.validation_client_name = "ORGNAME-validator"
 end
